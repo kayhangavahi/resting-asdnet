@@ -37,4 +37,3 @@ def getProcessedInput(featureCount, fmax, np_all_epochs, all_epochs, featureExtr
     # X_2d_reshaped
     return X_2d
     
-# test
