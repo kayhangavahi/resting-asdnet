@@ -16,8 +16,8 @@ from mne.time_frequency import tfr_morlet
 import math
 from mne.preprocessing import (create_eog_epochs, create_ecg_epochs,
                                corrmap)
-matplotlib.use('Qt5Agg')
-mne.set_log_level('warning')
+#matplotlib.use('Qt5Agg')
+#mne.set_log_level('warning')
 
 # Set seed
 #random.seed(42) 
