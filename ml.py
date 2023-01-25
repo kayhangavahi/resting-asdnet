@@ -135,15 +135,12 @@ def runTests(X_2d, y, channel=""):
     #Random Forest
     clf = RandomForestClassifier(n_estimators = 100)
     testModel(X_2d, y, clf, cv, 1, f"RF {channel}", scoring)
-    #clf = AdaBoostClassifier(DecisionTreeClassifier(max_depth=3), n_estimators=100)
-    #clf = SVC(C=1, kernel='linear')
-    #clf.fit(X_2d, y)
-    #y_pred = clf.predict(X_2d)
     #testModel(X_2d, y, clf, cv, 1, f"RF {channel}", scoring)
     
     
     #AdaBoost
-    
+    clf = AdaBoostClassifier(DecisionTreeClassifier(max_depth=3), n_estimators=100)
+    testModel(X_2d, y, clf, cv, 1, f"AdaBoost {channel}", scoring)
     
     #KNN
     #clf = KNeighborsClassifier(n_neighbors=3)
