@@ -23,7 +23,7 @@ from sklearn.ensemble import (
     AdaBoostClassifier,
 )
 from sklearn.tree import DecisionTreeClassifier
-
+import pandas as pd
 
 #matplotlib.use('Qt5Agg')
 mne.set_log_level('warning')
@@ -107,7 +107,7 @@ def viewEpochChannelPSD(epoch, channel, matrix):
     ax.plot(_x , matrix[epoch, channel, :], color='k')
     plt.show()
 
-def runTests(X_2d, y, channel=""):
+def runTests(X_2d, y, all_epochs, channel=""):
     # Testing Parameters
     #cv = ShuffleSplit(10, test_size=0.2, random_state=42)
     n_splits = 5
@@ -133,14 +133,35 @@ def runTests(X_2d, y, channel=""):
     #saveModel(X_2d, y, clf, "svm.model")
 
     #Random Forest
-    clf = RandomForestClassifier(n_estimators = 100)
+    clf = RandomForestClassifier(n_estimators = 100, max_depth=20)
     testModel(X_2d, y, clf, cv, 1, f"RF {channel}", scoring)
+    
+    clf.fit(X_2d, y)
+    importances = clf.feature_importances_
+    '''std = np.std([tree.feature_importances_ for tree in clf.estimators_], axis=0)
+    forest_importances = pd.Series(importances, index=all_epochs.ch_names)
+    fig, ax = plt.subplots()
+    forest_importances.plot.bar(yerr=std, ax=ax)
+    ax.set_title("Feature importances using MDI")
+    ax.set_ylabel("Mean decrease in impurity")
+    fig.tight_layout()'''
+    
+    mdi_importances = pd.Series(
+    importances, index=all_epochs.ch_names \
+    ).sort_values(ascending=True)
+    ax = mdi_importances.plot.barh()
+    ax.set_title("Random Forest Feature Importances (MDI)")
+    ax.figure.tight_layout()    
+        
+    
+    
+    
     #testModel(X_2d, y, clf, cv, 1, f"RF {channel}", scoring)
     
     
     #AdaBoost
-    clf = AdaBoostClassifier(DecisionTreeClassifier(max_depth=3), n_estimators=100)
-    testModel(X_2d, y, clf, cv, 1, f"AdaBoost {channel}", scoring)
+    #clf = AdaBoostClassifier(DecisionTreeClassifier(max_depth=3), n_estimators=100)
+    #testModel(X_2d, y, clf, cv, 1, f"AdaBoost {channel}", scoring)
     
     #KNN
     #clf = KNeighborsClassifier(n_neighbors=3)
@@ -176,7 +197,7 @@ def extractFetures(signal):
 def main():
     all_epochs, idx_asd, idx_td, np_all_epochs, y = getInput('train_all_epo.fif')
     X_2d = getProcessedInput(1, 30, np_all_epochs, all_epochs, extractFetures) 
-    y_pred = runTests(X_2d, y)
+    y_pred = runTests(X_2d, y, all_epochs)
 
 
     print(X_2d[idx_asd].shape, X_2d[idx_td].shape, y.shape)
