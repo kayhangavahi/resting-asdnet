@@ -157,8 +157,8 @@ def runTests(X_2d, y, all_epochs, channel=""):
     
     
     #AdaBoost
-    #clf = AdaBoostClassifier(DecisionTreeClassifier(max_depth=3), n_estimators=100)
-    #testModel(X_2d, y, clf, cv, 1, f"AdaBoost {channel}", scoring)
+    clf = AdaBoostClassifier(n_estimators=100)
+    testModel(X_2d, y, clf, cv, 1, f"AdaBoost {channel}", scoring)
     
     #KNN
     clf = KNeighborsClassifier(n_neighbors=3)
@@ -177,7 +177,7 @@ def runTests(X_2d, y, all_epochs, channel=""):
     testModel(X_2d, y, clf, cv, 1, f"Logistic Regression {channel}", scoring)
     #saveModel(X_2d, y, clf, "lr.model")
     
-
+    aa
     
 def saveModel(X, y, clf, filename):
     clf.fit(X, y)
