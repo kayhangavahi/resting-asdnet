@@ -161,23 +161,23 @@ def runTests(X_2d, y, all_epochs, channel=""):
     #testModel(X_2d, y, clf, cv, 1, f"AdaBoost {channel}", scoring)
     
     #KNN
-    #clf = KNeighborsClassifier(n_neighbors=3)
-    #testModel(X_2d, y, clf, cv, 1, f"knn {channel}", scoring)
+    clf = KNeighborsClassifier(n_neighbors=3)
+    testModel(X_2d, y, clf, cv, 1, f"knn {channel}", scoring)
     #saveModel(X_2d, y, clf, "knn.model")
 
  
     # LDA
-    #clf = LinearDiscriminantAnalysis()
-    #testModel(X_2d, y, clf, cv, 1, f"LDA {channel}", scoring)
+    clf = LinearDiscriminantAnalysis()
+    testModel(X_2d, y, clf, cv, 1, f"LDA {channel}", scoring)
     #saveModel(X_2d, y, clf, "lda.model")
 
     # Logistic Regression
-    #clf = make_pipeline(StandardScaler(),
-    #LogisticRegression(max_iter=500))
-    #testModel(X_2d, y, clf, cv, 1, f"Logistic Regression {channel}", scoring)
+    clf = make_pipeline(StandardScaler(),
+    LogisticRegression(max_iter=500))
+    testModel(X_2d, y, clf, cv, 1, f"Logistic Regression {channel}", scoring)
     #saveModel(X_2d, y, clf, "lr.model")
     
-    return y_pred
+
     
 def saveModel(X, y, clf, filename):
     clf.fit(X, y)
@@ -221,9 +221,9 @@ def main():
     #clf = SVC(C=1, kernel='linear')
     #saveModel(X_2d, y, clf, "lr.model")
     
-    return X_2d, y, y_pred
+
     
-X_2d, y, y_pred= main()
+main()
 
 
 
