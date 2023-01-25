@@ -152,10 +152,7 @@ def runTests(X_2d, y, all_epochs, channel=""):
     ax = mdi_importances.plot.barh()
     ax.set_title("Random Forest Feature Importances (MDI)")
     ax.figure.tight_layout()    
-        
-    
-    
-    
+          
     #testModel(X_2d, y, clf, cv, 1, f"RF {channel}", scoring)
     
     
