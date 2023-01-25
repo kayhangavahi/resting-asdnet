@@ -151,7 +151,7 @@ def main():
     X_2d = getProcessedInput(1, 30, np_all_epochs, all_epochs, extractFetures) 
     runTests(X_2d, y)
 
-   
+
     print(X_2d[idx_asd].shape, X_2d[idx_td].shape, y.shape)
     #print(X_2d[:, -3:].shape)
     #print(X_2d[0, -3:])
@@ -164,8 +164,8 @@ def main():
         channel_name = all_epochs.ch_names[i]
         X_2d = getSingleChannelProcessedInput(i, 1, 30, np_all_epochs, all_epochs, extractFetures)
         runTests(X_2d, y, channel_name)
-        #print(X_2d)
-    '''
+        #print(X_2d)'''
+    
 
     # TODO
     # - Run multiple check for all channels individually using gamma power to see which channel has high accuracy
@@ -175,8 +175,12 @@ def main():
     #clf = LinearDiscriminantAnalysis()
     #clf = SVC(C=1, kernel='linear')
     #saveModel(X_2d, y, clf, "lr.model")
+    
+    return X_2d
+    
+X_2d = main()
 
-main()
+aa
 
 
 
