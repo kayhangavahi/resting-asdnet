@@ -17,7 +17,12 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.pipeline import make_pipeline
 from sklearn.linear_model import LogisticRegression
 from sklearn.neighbors import KNeighborsClassifier
-
+from sklearn.ensemble import (
+    RandomForestClassifier,
+    ExtraTreesClassifier,
+    AdaBoostClassifier,
+)
+from sklearn.tree import DecisionTreeClassifier
 
 
 #matplotlib.use('Qt5Agg')
@@ -109,13 +114,31 @@ def runTests(X_2d, y, channel=""):
     scoring = 'roc_auc'
     cv = StratifiedKFold(n_splits=n_splits)
 
+    # Standardize
+    mean = X_2d.mean(axis=0)
+    std = X_2d.std(axis=0)
+    X_2d = (X_2d - mean) / std
+    
+    # Shuffle
+    idx = np.arange(X_2d.shape[0])
+    np.random.seed(1)
+    np.random.shuffle(idx)
+    X_2d = X_2d[idx]
+    y = y[idx]
+
+
     # SVM
     clf = SVC(C=1, kernel='linear')
     testModel(X_2d, y, clf, cv, 1, f"SVM {channel}", scoring)
-    saveModel(X_2d, y, clf, "svm.model")
+    #saveModel(X_2d, y, clf, "svm.model")
 
     # Add Random Forest?
-
+    #clf = RandomForestClassifier(n_estimators = 100)
+    #clf = AdaBoostClassifier(DecisionTreeClassifier(max_depth=3), n_estimators=100)
+    #clf = SVC(C=1, kernel='linear')
+    #clf.fit(X_2d, y)
+    #y_pred = clf.predict(X_2d)
+    #testModel(X_2d, y, clf, cv, 1, f"RF {channel}", scoring)
 
     #KNN
     #clf = KNeighborsClassifier(n_neighbors=3)
@@ -133,7 +156,9 @@ def runTests(X_2d, y, channel=""):
     #LogisticRegression(max_iter=500))
     #testModel(X_2d, y, clf, cv, 1, f"Logistic Regression {channel}", scoring)
     #saveModel(X_2d, y, clf, "lr.model")
-
+    
+    return y_pred
+    
 def saveModel(X, y, clf, filename):
     clf.fit(X, y)
     pickle.dump(clf,open(f"models/{filename}", 'wb'))
@@ -149,7 +174,7 @@ def extractFetures(signal):
 def main():
     all_epochs, idx_asd, idx_td, np_all_epochs, y = getInput('train_all_epo.fif')
     X_2d = getProcessedInput(1, 30, np_all_epochs, all_epochs, extractFetures) 
-    runTests(X_2d, y)
+    y_pred = runTests(X_2d, y)
 
 
     print(X_2d[idx_asd].shape, X_2d[idx_td].shape, y.shape)
@@ -176,11 +201,11 @@ def main():
     #clf = SVC(C=1, kernel='linear')
     #saveModel(X_2d, y, clf, "lr.model")
     
-    return X_2d
+    return X_2d, y, y_pred
     
-X_2d = main()
+X_2d, y, y_pred= main()
 
-aa
+
 
 
 
