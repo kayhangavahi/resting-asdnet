@@ -182,6 +182,7 @@ def cleanData(dir):
     plt.show()
     
 cleanData("train")
+cleanData("test")
 # processRandomFile()
 # icaClean()
 

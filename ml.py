@@ -128,13 +128,14 @@ def runTests(X_2d, y, all_epochs, channel=""):
 
 
     # SVM
-    clf = SVC(C=1, kernel='linear')
-    testModel(X_2d, y, clf, cv, 1, f"SVM {channel}", scoring)
+    #clf = SVC(C=1, kernel='linear')
+    #testModel(X_2d, y, clf, cv, 1, f"SVM {channel}", scoring)
     #saveModel(X_2d, y, clf, "svm.model")
 
     #Random Forest
     clf = RandomForestClassifier(n_estimators = 100, max_depth=20)
     testModel(X_2d, y, clf, cv, 1, f"RF {channel}", scoring)
+    saveModel(X_2d, y, clf, mean, std, "rf.model")
     
     clf.fit(X_2d, y)
     importances = clf.feature_importances_
@@ -157,31 +158,32 @@ def runTests(X_2d, y, all_epochs, channel=""):
     
     
     #AdaBoost
-    clf = AdaBoostClassifier(n_estimators=100)
-    testModel(X_2d, y, clf, cv, 1, f"AdaBoost {channel}", scoring)
+    #clf = AdaBoostClassifier(n_estimators=100)
+    #testModel(X_2d, y, clf, cv, 1, f"AdaBoost {channel}", scoring)
     
     #KNN
-    clf = KNeighborsClassifier(n_neighbors=3)
-    testModel(X_2d, y, clf, cv, 1, f"knn {channel}", scoring)
+    #clf = KNeighborsClassifier(n_neighbors=3)
+    #testModel(X_2d, y, clf, cv, 1, f"knn {channel}", scoring)
     #saveModel(X_2d, y, clf, "knn.model")
 
  
     # LDA
-    clf = LinearDiscriminantAnalysis()
-    testModel(X_2d, y, clf, cv, 1, f"LDA {channel}", scoring)
+    #clf = LinearDiscriminantAnalysis()
+    #testModel(X_2d, y, clf, cv, 1, f"LDA {channel}", scoring)
     #saveModel(X_2d, y, clf, "lda.model")
 
     # Logistic Regression
-    clf = make_pipeline(StandardScaler(),
-    LogisticRegression(max_iter=500))
-    testModel(X_2d, y, clf, cv, 1, f"Logistic Regression {channel}", scoring)
+    #clf = make_pipeline(StandardScaler(),
+    #LogisticRegression(max_iter=500))
+    #testModel(X_2d, y, clf, cv, 1, f"Logistic Regression {channel}", scoring)
     #saveModel(X_2d, y, clf, "lr.model")
     
-    aa
     
-def saveModel(X, y, clf, filename):
+    
+def saveModel(X, y, clf, mean, std, filename):
     clf.fit(X, y)
     pickle.dump(clf,open(f"models/{filename}", 'wb'))
+    pickle.dump([mean, std], open(f"models/mean_std", 'wb'))
 
 def extractFetures(signal):
     delta = np.mean(signal[:4])
@@ -244,7 +246,15 @@ def extractFetures(signal):
 
 def testModel(X_2d, y, model_file, model_name):
     #model_file = "lr.model"
+
+    
     loaded_model = pickle.load(open(f"models/{model_file}", 'rb'))
+    loaded_mean_std = pickle.load(open(f"models/mean_std", 'rb'))
+    mean = loaded_mean_std[0]
+    std = loaded_mean_std[1]
+    
+    X_2d = (X_2d - mean) / std
+
     result = loaded_model.score(X_2d, y)
     print(f"{model_name} Classification score: {result}")
 
@@ -267,7 +277,7 @@ def main():
 
     #print(all_epochs.shape, np_all_epochs.shape)
     #print(all_epochs)
-    testModel(X_2d, y, "svm.model", "SVM")
+    testModel(X_2d, y, "rf.model", "RF")
     #testModel(X_2d, y, "lda.model", "LDA")
     #testModel(X_2d, y, "lr.model", "LR")
 
