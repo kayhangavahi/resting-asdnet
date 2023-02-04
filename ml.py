@@ -23,6 +23,8 @@ from sklearn.ensemble import (
     AdaBoostClassifier,
 )
 from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import roc_auc_score
+from sklearn.metrics import accuracy_score
 import pandas as pd
 
 #matplotlib.use('Qt5Agg')
@@ -97,7 +99,7 @@ def visualizeResults(scores, title):
 def testModel(X, y, clf, cv, n_jobs, title, scoring=None):
     scores_full = cross_val_score(clf, X, y, cv=cv, n_jobs=1, scoring=scoring)
     print(f"{title} Classification score: {np.mean(scores_full)} (std. {np.std(scores_full)})")
-    visualizeResults(scores_full, title)
+    #visualizeResults(scores_full, title)
 
 
 def viewEpochChannelPSD(epoch, channel, matrix):
@@ -256,14 +258,18 @@ def testModel(X_2d, y, model_file, model_name):
     X_2d = (X_2d - mean) / std
 
     result = loaded_model.score(X_2d, y)
+    roc = accuracy_score(y, loaded_model.predict(X_2d))
+    
+    
     print(f"{model_name} Classification score: {result}")
+    print(f"{model_name} roc_auc score: {roc}")
 
 def main():
     all_epochs, idx_asd, idx_td, np_all_epochs, y = getInput('test_all_epo.fif')
     X_2d = getProcessedInput(1, 30, np_all_epochs, all_epochs, extractFetures)
-    all_epochs[idx_td].compute_psd(fmax=60).plot()
-    all_epochs[idx_asd].compute_psd(fmax=60).plot()
-    plt.show()
+    #all_epochs[idx_td].compute_psd(fmax=60).plot()
+    #all_epochs[idx_asd].compute_psd(fmax=60).plot()
+    #plt.show()
 
     #print(X_2d[idx_td].shape, X_2d[idx_asd].shape)
     #all_epochs[0].plot()
