@@ -258,7 +258,7 @@ def testModel(X_2d, y, model_file, model_name):
     X_2d = (X_2d - mean) / std
 
     result = loaded_model.score(X_2d, y)
-    roc = accuracy_score(y, loaded_model.predict(X_2d))
+    roc = roc_auc_score(y, loaded_model.predict(X_2d))
     
     
     print(f"{model_name} Classification score: {result}")
