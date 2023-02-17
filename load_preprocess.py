@@ -182,13 +182,13 @@ def cleanData(dir):
     plt.show()
     
 cleanData("train")
-cleanData("test")
+#cleanData("test")
 # processRandomFile()
 # icaClean()
 
 
-asd_epochs = mne.read_epochs(Path('out_data') / 'train_asd_concat_cleaned_1_40hz_epo.fif')
-td_epochs = mne.read_epochs(Path('out_data') / 'train_td_concat_cleaned_1_40hz_epo.fif')
+#asd_epochs = mne.read_epochs(Path('out_data') / 'train_asd_concat_cleaned_1_40hz_epo.fif')
+#td_epochs = mne.read_epochs(Path('out_data') / 'train_td_concat_cleaned_1_40hz_epo.fif')
 
 #fig = asd_epochs.compute_psd(fmax=60).plot(average=True)
 #fig.suptitle("asd")
@@ -259,7 +259,7 @@ def visualizePower(minFreq, maxFreq, epochs, plotChannels=True, plotTopo=True, e
 
 
 # 4. (Example) Load and Combine Existing Epochs
-
+'''
 test_asd_epochs = mne.read_epochs(Path('out_data') / 'test_asd_concat_cleaned_1_40hz_epo.fif')
 test_td_epochs = mne.read_epochs(Path('out_data') / 'test_td_concat_cleaned_1_40hz_epo.fif')
 test_all_epochs = mne.concatenate_epochs([test_asd_epochs, test_td_epochs])
@@ -267,7 +267,7 @@ test_all_epochs = mne.concatenate_epochs([test_asd_epochs, test_td_epochs])
 # Set if you want to equalize the event counts
 test_all_epochs.equalize_event_counts(test_all_epochs.event_id)
 
-test_all_epochs.save(Path('out_data') / 'test_all_cleaned_equal_1_40hz_epo.fif')
+test_all_epochs.save(Path('out_data') / 'test_all_cleaned_equal_1_40hz_epo.fif')'''
 
 
 # 4. (Example) Create and Save Combined Raws and Process
