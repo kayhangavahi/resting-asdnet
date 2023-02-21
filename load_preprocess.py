@@ -165,7 +165,9 @@ def cleanData(dir):
     for file in data_path_list:
         process(file)
         count += 1
-
+    
+    
+    
     asd_concat_epochs = mne.concatenate_epochs(study_epochs['asd'])
     td_concat_epochs = mne.concatenate_epochs(study_epochs['td'])
     print(f"{count} files processed.")
@@ -179,10 +181,16 @@ def cleanData(dir):
     train_all_epochs.equalize_event_counts(train_all_epochs.event_id)
     train_all_epochs.save(Path('out_data') / f'{dir}_all_epo.fif')
     
+
+    
     plt.show()
     
 cleanData("train")
-#cleanData("test")
+study_epochs = {
+    'td': [],
+    'asd': []
+}
+cleanData("test")
 # processRandomFile()
 # icaClean()
 
